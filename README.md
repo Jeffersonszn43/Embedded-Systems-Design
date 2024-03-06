@@ -1,5 +1,5 @@
-## Embedded Sysytems Design Projects
-#### Here is a repository that contains all of my projects from Embedded Sysytems Design.
+## Embedded Systems Design Projects
+#### Here is a repository that contains all of my projects from Embedded Systems Design.
 
 #### For this course we used the ESP32 Wroom 32 board to complete our midterm project. The ESP32 is a series of system on a chip microcontrollers that are low-cost and low-power. The ESP32 comes with integrated Wi-Fi and dual-mode Bluetooth. 
 
