@@ -8,7 +8,7 @@ Update: 2023-09-28
 
 /*
 Updated by: Jefferson Charles
-Date: 2/14/24
+Date: 2/29/24
 */
 
 // include files
@@ -105,8 +105,11 @@ void loop()
     distVal = max (distVal, 250);
     mapDistVal = map (distVal, 250, 1000, 0, 180);  // map values between in range (250, 1010) to values in range (0, 180)
     //myservo.write (mapDistVal);
+
     // Here is a variable to be used to keep the position of the servo to its max position.
     int lastPosition = 0;
+    // Here this if statement is saying that if the value of the servo does not equal the last position then have the value be the last position so that 
+    // the servo will stop at that last position when you move your hand away quickly horizontally.
     if (mapDistVal != lastPosition)
     {
       myservo.write (mapDistVal);
@@ -119,21 +122,22 @@ void loop()
   // the code above causes the servo to sweep from 0-90 as the distVal sweeps from 250-1000 as you vertically move your hand up/down over the distance sensor
   // modify the code so that if you move your hand horizantally quickly the servo stops in its last position
   /* enter your comments here:
-  
+  I created a if statement that if the distVal is between the min and the max range, then the distance sensor will start moving the servo between 0 to 90 degrees. I also added
+  inside the if statement another if statement that will keep the servo in the last position its in when you quickly move your hand horizontally away. 
   */
 
 
   // ---------- light sensor controls
   // read light sensor
   lightVal = analogRead(lightPin);  // light sensor
-  // The following two lines designate a deadzone band for the blue led between .2 and .4 of the baseLightVal for no change.
-  if ((lightVal > (baseLightVal - (0.8 * baseLightVal)))) // if val above thresH (20% below room light)
+  // The following two lines designate a deadzone band for the blue led between .3 and .5 of the baseLightVal for no change.
+  if ((lightVal > (baseLightVal - (0.3 * baseLightVal)))) 
   { 
-    digitalWrite(lightLed, HIGH); 
+    digitalWrite(lightLed, HIGH); // if val above thresh (30% below room light)
   }  
-  else if ((lightVal < (baseLightVal - (0.9 * baseLightVal)))) // if val under thresh (40% below room light)
+  else if ((lightVal < (baseLightVal - (0.5 * baseLightVal)))) 
   { 
-    digitalWrite(lightLed, LOW);  
+    digitalWrite(lightLed, LOW);  // if val under thresh (50% below room light)
   }  
   // observe when the blue led turns off and on as you move your finger up and down above the light sensor
 
@@ -156,33 +160,6 @@ void loop()
   Switching the values 245 and 10 will reverse the effect of dimming when you apply darkness to the light sensor.
   */
 
-  // Commented code below just for requirement 4
-  // ---------- touch sensor controls
-  // read the touch sensor, and if touched, turn on the green led, when no touch turn led off
-  //Below will be the variable that will be the baseline value.
-  //const int baselineVal = 1000;
-  //int threshold;
-  //touchVal = analogRead(touchPin);
-
-  // Here we are calculating the threshold that will be a percentage of the baseline value.
-  // we are doing 90% of the baseline.
-  //threshold = baselineVal * 0.9; 
-  //if (touchVal < threshold) 
-  //{ 
-  //  digitalWrite(touchLed, HIGH); // if touched, turn green LED on
-  //}              
-  //else                            
-  //{ 
-  //  digitalWrite(touchLed, LOW);  // not touched, so turn green LED off
-  //}
-
-
-  // ********** requirement #4
-  // the code above uses an absolute value to detect touching which may not be suitable for your skin
-  // change that value to a percentage of the baseline value based on the actual reading when you touch
-   /* enter your comments here:
-   I created a basline value variable that will be used to calculate a threshold value that will be used in the if/else statement to see if the touch sensor is touched or not to light up the green LED.
-  */
   
   // ---------- touch sensor controls
   // read the touch sensor, and if touched, turn on the green led, when no touch turn led off
@@ -191,9 +168,37 @@ void loop()
   int threshold;
   touchVal = analogRead(touchPin);
 
-  // Here we are calculating the threshold that will be a percentage of the baseline value.
-  // we are doing 90% of the baseline.
+  //Here we are calculating the threshold that will be a percentage of the baseline value.
+  //we are doing 90% of the baseline.
   threshold = baselineVal * 0.9; 
+  if (touchVal < threshold) 
+  { 
+   digitalWrite(touchLed, HIGH); // if touched, turn green LED on
+  }              
+  else                            
+  { 
+   digitalWrite(touchLed, LOW);  // not touched, so turn green LED off
+  }
+
+
+  // ********** requirement #4
+  // the code above uses an absolute value to detect touching which may not be suitable for your skin
+  // change that value to a percentage of the baseline value based on the actual reading when you touch
+   /* enter your comments here:
+   I created a basline value variable that will be used to calculate a threshold value that will be used in the if/else statement to see if the touch sensor is touched or not to light up the green LED.
+  */
+
+  
+  // ---------- touch sensor controls
+  // read the touch sensor, and if touched, turn on the green led, when no touch turn led off
+  //Below will be the variable that will be the baseline value.
+  //const int baselineVal = 1000;
+  //int threshold;
+  //touchVal = analogRead(touchPin);
+
+  //Here we are calculating the threshold that will be a percentage of the baseline value.
+  //we are doing 90% of the baseline.
+  //threshold = baselineVal * 0.9; 
   if (touchVal < threshold) 
   {
     // Here is where we are going to toggle the green LED when we touch the touch sensor
@@ -219,12 +224,12 @@ void loop()
   // ---------- temperature sensor controls
   // read the temp sensor, and if temp higher than the baseline, turn red led on, else turn led off
   // you can increase the sensor temp by touching/squeezing it between your thumb and index finger
-  tempVal = analogRead(tempPin);  // temp sensor
-  if (tempVal > baseTempVal + 1.05) 
+  tempVal = analogRead(tempPin);  // temperature sensor
+  if (tempVal >= baseTempVal * 1.03) // Here is where I did my upperbound for the temperature to where if the temperature exceeds above the baseline * the deadzone, then the red LED turns on
   { 
     digitalWrite(tempLed, HIGH);  
   } 
-  else if (tempVal < baseTempVal - 1.05)
+  else if (tempVal < baseTempVal * 1.03) // Here is where I did my lowerbound, which is basically saying if the temperature is lower than the baseline * the deadzone, then the red LED turns off
   { 
     digitalWrite(tempLed, LOW);   
   }
@@ -235,7 +240,7 @@ void loop()
   // change the code and apply the deadzone band concept instead of threshold value, so that the led will stop flickering 
   /* enter your comments here:
   I created a deadzone value that will be around the baseline temperature value. I also created an upper and lower bound for the deadzone value.
-  if the temprature is higher than the upper bound, then the red LED will turn on. If the temperature is lower that the lower bound, then the red LED will turn off.
+  if the temprature is higher than or equal to the upper bound, then the red LED will turn on. If the temperature is lower that the lower bound, then the red LED will turn off.
   */
 
 
@@ -259,8 +264,8 @@ void loop()
    When the loop delay is 10ms, the components on the board read their analog inputs at a quicker rate.
    At a 100 ms, the rate at which the components read their analog inputs is at a normal rate.
    At 500 ms, the rate at which the components read their analog inputs is slow.
-   Lastly at 1000ms, the rate at which the components read their analog inputs is raelly slow.
-   So the higher in ms the delay is the slower the components read their analog inputs. The smalller the in ms the delay is, the faster the components read their analog inputs.
+   Lastly at 1000ms, the rate at which the components read their analog inputs is really slow.
+   So the higher in ms the delay, the slower the components read their analog inputs. The smalller the in ms the delay, the faster the components read their analog inputs.
   */
 
 
