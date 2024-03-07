@@ -42,6 +42,6 @@
 ##### - One Blue LED
 ##### - One Yellow LED
 
-#### Here is a video that shows a demo of the midterm project: https://youtu.be/ADM_uNxHxt0?si=r8oWLH7FcSiBsdF3
+- Here is a video that shows a demo of the midterm project: https://youtu.be/ADM_uNxHxt0?si=r8oWLH7FcSiBsdF3
 
 
