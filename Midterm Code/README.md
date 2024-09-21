@@ -11,7 +11,7 @@
 
 ### 3. Touch Sensor:
 
-- The touch sensor workes to where every time you touched the touch sensor, the green LED turns on. The 4th requirement of the project was to modify the touch sensor to where every you touched the touch sensor the green LED turns on and off. The 5th requirement was to modify the touch sensor to toggle the green LED upon touching the touch sensor.
+- The touch sensor workes to where every time you touched the touch sensor, the green LED turns on. The 4th requirement of the project was to modify the touch sensor to where everytime you now touch the touch sensor the green LED turns on and off. The 5th requirement was to modify the touch sensor to toggle the green LED upon touching the touch sensor.
 
 ### 4. Temperature Sensor:
 
